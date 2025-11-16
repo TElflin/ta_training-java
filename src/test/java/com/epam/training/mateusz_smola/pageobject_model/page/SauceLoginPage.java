@@ -9,10 +9,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
-public class SauceLoginPage {
+public class SauceLoginPage extends AbstractPage{
     private static final String LOGIN_PAGE_URL = "https://www.saucedemo.com/";
-    private WebDriver driver;
-
 
     @FindBy(xpath = "//input[@id='user-name']")
     private WebElement username;
@@ -24,10 +22,12 @@ public class SauceLoginPage {
     @FindBy(xpath = "//input[@id='login-button']")
     private WebElement loginButton;
 
+    @FindBy(xpath = "//h3[text()]")
+    private WebElement errorMessage;
+
 
     public SauceLoginPage(WebDriver driver) {
-        this.driver = driver;
-        PageFactory.initElements(driver, this);
+        super(driver);
     }
 
     public SauceLoginPage openPage() {
@@ -53,10 +53,24 @@ public class SauceLoginPage {
         return this;
     }
 
-    public SauceAwsomeWaresPage clickLogin() {
+
+    public SauceAwesomeWaresPage clickLoginRightCredentials() {
 
         loginButton.click();
-        return new SauceAwsomeWaresPage(driver);
+        return new SauceAwesomeWaresPage(driver);
+    }
+
+    public SauceLoginPage clickLoginWrongCredentials() {
+
+        loginButton.click();
+        return this;
+    }
+
+    public String getErrorMessage ()
+    {
+        new WebDriverWait(driver, Duration.ofSeconds(5))
+                .until(driver1 -> errorMessage.isDisplayed());
+        return errorMessage.getText();
     }
 
 }
