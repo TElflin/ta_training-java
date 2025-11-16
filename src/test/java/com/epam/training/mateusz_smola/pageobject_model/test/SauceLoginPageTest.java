@@ -2,6 +2,8 @@ package com.epam.training.mateusz_smola.pageobject_model.test;
 
 import com.epam.training.mateusz_smola.pageobject_model.page.SauceLoginPage;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,29 +27,29 @@ public class SauceLoginPageTest {
     public void tearDown() {
         driver.quit();
     }
-
-    @Test
-    void testLoginWithErasedUsername () {
+    @ParameterizedTest
+    @CsvFileSource(files = "src/test/resources/SouceLoginCredentials.csv", delimiterString = ",")
+    void testLoginWithErasedUsername (String username, String password) {
         String expectedMessage = "Username is required";
-        String actualMessage = loginPage.openPage().enterCredentials("standard_user", "secret_sauce")
+        String actualMessage = loginPage.openPage().enterCredentials(username, password)
                 .clearUsername().clickLoginWrongCredentials().getErrorMessage();
 
         assertThat(actualMessage).contains(expectedMessage);
     }
-    
-    @Test
-    void testLoginWithErasedPassword () {
+    @ParameterizedTest
+    @CsvFileSource(files = "src/test/resources/SouceLoginCredentials.csv", delimiterString = ",")
+    void testLoginWithErasedPassword (String username, String password) {
         String expectedMessage = "Password is required";
-        String actualMessage = loginPage.openPage().enterCredentials("standard_user", "secret_sauce").clearPassword()
+        String actualMessage = loginPage.openPage().enterCredentials(username, password)
                 .clearPassword().clickLoginWrongCredentials().getErrorMessage();
 
         assertThat(actualMessage).contains(expectedMessage);
     }
-
-    @Test
-    public void testLoginWithValidCredentials() {
+    @ParameterizedTest
+    @CsvFileSource(files = "src/test/resources/SouceLoginCredentials.csv", delimiterString = ",")
+    public void testLoginWithValidCredentials (String username, String password) {
         String expectedTitle = "Swag Labs";
-        String actualTitle = loginPage.openPage().enterCredentials("standard_user", "secret_sauce")
+        String actualTitle = loginPage.openPage().enterCredentials(username, password)
                 .clickLoginRightCredentials().extractTitleName();
 
         assertThat(actualTitle).isEqualTo(expectedTitle);
