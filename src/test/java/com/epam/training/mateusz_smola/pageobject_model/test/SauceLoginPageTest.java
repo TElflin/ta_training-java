@@ -6,7 +6,6 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.edge.EdgeDriver;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -21,7 +20,6 @@ public class SauceLoginPageTest {
     @BeforeAll
     public void setup() {
         driver = DriverSingleton.getDriver();
-//        driver = new EdgeDriver();
         loginPage = new SauceLoginPage(driver);
     }
 
@@ -39,8 +37,10 @@ public class SauceLoginPageTest {
     @CsvFileSource(files = "src/test/resources/SouceLoginCredentialsForFail.csv", delimiterString = ",")
     void testLoginWithErasedUsername (String username, String password) {
         String expectedMessage = "Username is required";
-         loginPage.openPage().enterCredentials(username, password);
-        String actualMessage =loginPage.clearUsername().clickLoginWrongCredentials().getErrorMessage();
+        String actualMessage = loginPage.openPage().enterCredentials(username, password).
+                clearUsername().
+                clickLoginWrongCredentials().
+                getErrorMessage();
 
         assertThat(actualMessage).contains(expectedMessage);
     }
