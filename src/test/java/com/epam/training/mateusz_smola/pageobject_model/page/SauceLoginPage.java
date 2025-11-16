@@ -4,9 +4,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
+import org.openqa.selenium.Keys;
 import java.time.Duration;
 
 public class SauceLoginPage extends AbstractPage{
@@ -46,12 +47,12 @@ public class SauceLoginPage extends AbstractPage{
     }
 
     public SauceLoginPage clearUsername() {
-        username.clear();
+        username.sendKeys(Keys.chord(Keys.CONTROL,"a", Keys.DELETE));
         return this;
     }
 
     public SauceLoginPage clearPassword() {
-        password.clear();
+        password.sendKeys(Keys.chord(Keys.CONTROL,"a", Keys.DELETE));
 
         return this;
     }
@@ -66,8 +67,11 @@ public class SauceLoginPage extends AbstractPage{
     }
 
     public SauceLoginPage clickLoginWrongCredentials() {
+
         new WebDriverWait(driver, Duration.ofSeconds(5))
-                .until(ExpectedConditions.elementToBeClickable(loginButton));
+                .until(ExpectedConditions.textToBePresentInElement(username,""));
+
+        System.out.println("Wypidsz pole tekstowe " + username.getText());
 
         loginButton.click();
         return this;

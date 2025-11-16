@@ -6,6 +6,8 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.edge.EdgeDriver;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 
@@ -27,17 +29,23 @@ public class SauceLoginPageTest {
     public void tearDown() {
         DriverSingleton.closeDriver();
     }
+
+    @BeforeEach
+    public void clearCookies() {
+        driver.manage().deleteAllCookies();
+    }
+
     @ParameterizedTest
-    @CsvFileSource(files = "src/test/resources/SouceLoginCredentials.csv", delimiterString = ",")
+    @CsvFileSource(files = "src/test/resources/SouceLoginCredentialsForFail.csv", delimiterString = ",")
     void testLoginWithErasedUsername (String username, String password) {
         String expectedMessage = "Username is required";
-        String actualMessage = loginPage.openPage().enterCredentials(username, password)
-                .clearUsername().clickLoginWrongCredentials().getErrorMessage();
+         loginPage.openPage().enterCredentials(username, password);
+        String actualMessage =loginPage.clearUsername().clickLoginWrongCredentials().getErrorMessage();
 
         assertThat(actualMessage).contains(expectedMessage);
     }
     @ParameterizedTest
-    @CsvFileSource(files = "src/test/resources/SouceLoginCredentials.csv", delimiterString = ",")
+    @CsvFileSource(files = "src/test/resources/SouceLoginCredentialsForFail.csv", delimiterString = ",")
     void testLoginWithErasedPassword (String username, String password) {
         String expectedMessage = "Password is required";
         String actualMessage = loginPage.openPage().enterCredentials(username, password)
