@@ -22,8 +22,10 @@ public class SauceLoginPage extends AbstractPage{
     @FindBy(xpath = "//input[@id='login-button']")
     private WebElement loginButton;
 
-    @FindBy(xpath = "//h3[text()]")
+    @FindBy(xpath = "//h3[@data-test='error']")
     private WebElement errorMessage;
+
+
 
 
     public SauceLoginPage(WebDriver driver) {
@@ -50,17 +52,22 @@ public class SauceLoginPage extends AbstractPage{
 
     public SauceLoginPage clearPassword() {
         password.clear();
+
         return this;
     }
 
 
     public SauceAwesomeWaresPage clickLoginRightCredentials() {
+        new WebDriverWait(driver, Duration.ofSeconds(5))
+                .until(ExpectedConditions.elementToBeClickable(loginButton));
 
         loginButton.click();
         return new SauceAwesomeWaresPage(driver);
     }
 
     public SauceLoginPage clickLoginWrongCredentials() {
+        new WebDriverWait(driver, Duration.ofSeconds(5))
+                .until(ExpectedConditions.elementToBeClickable(loginButton));
 
         loginButton.click();
         return this;
