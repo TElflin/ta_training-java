@@ -53,7 +53,7 @@ public class SauceLoginPage extends AbstractPage{
         logger.info("Clearing username field");
         username.sendKeys(Keys.chord(Keys.CONTROL,"a", Keys.DELETE));
         new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.textToBePresentInElement(username,"ok"));
+                .until(ExpectedConditions.textToBePresentInElement(username,""));
         return this;
     }
 
@@ -61,7 +61,7 @@ public class SauceLoginPage extends AbstractPage{
         logger.info("Clearing password field");
         password.sendKeys(Keys.chord(Keys.CONTROL,"a", Keys.DELETE));
         new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.textToBePresentInElement(password,"ok"));
+                .until(ExpectedConditions.textToBePresentInElement(password,""));
 
         return this;
     }

@@ -13,22 +13,22 @@ import org.slf4j.LoggerFactory;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-@Execution(ExecutionMode.CONCURRENT)
-@TestInstance(TestInstance.Lifecycle.PER_METHOD)
+
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class SauceLoginPageTest {
 
     private static final Logger logger = LoggerFactory.getLogger(SauceLoginPageTest.class);
     private WebDriver driver;
     public static SauceLoginPage loginPage;
 
-    @BeforeEach
+    @BeforeAll
     public void setup() {
         logger.info("Setting up for tests");
         driver = DriverSingleton.getDriver();
         loginPage = new SauceLoginPage(driver);
     }
 
-    @AfterEach
+    @AfterAll
     public void tearDown() {
         logger.info("Clearing after tests");
         DriverSingleton.closeDriver();

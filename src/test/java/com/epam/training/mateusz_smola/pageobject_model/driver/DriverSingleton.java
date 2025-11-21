@@ -1,40 +1,40 @@
 package com.epam.training.mateusz_smola.pageobject_model.driver;
 
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class DriverSingleton {
-    private static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
+    private static WebDriver driver;
     private static final Logger logger = LoggerFactory.getLogger(DriverSingleton.class);
 
     private DriverSingleton(){}
 
     public static WebDriver getDriver() {
-        if (driver.get() == null) {
+        if (driver == null) {
             logger.info("Initializing WebDriver");
-            String browser = System.getProperty("browser", "firefox");
+            String browser = System.setProperty("browser","firefox");
             switch (System.getProperty("browser")) {
                 case "edge" -> {
                     logger.info("Using Edge Driver");
-                    driver.set( new EdgeDriver());
+                    driver =  new EdgeDriver();
                 }
                 default -> {
                     logger.info("Using Firefox Driver");
-                    driver.set( new FirefoxDriver());
+                    driver = new FirefoxDriver();
                 }
             }
         }
-        driver.get().manage().window().maximize();
-        return driver.get();
+        driver.manage().window().maximize();
+        return driver;
     }
 
     public static void closeDriver() {
-        driver.get().quit();
-        driver.remove();
         logger.info("Closing WebDriver");
+        driver.quit();
+        driver = null;
+
     }
 }

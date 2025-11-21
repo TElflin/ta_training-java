@@ -119,11 +119,11 @@
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>3.3.0</version>
-                    <configuration>
-                        <parallel>methods</parallel>
-                        <threadCount>4</threadCount>
-                        <argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
-                    </configuration>
+<!--                    <configuration>-->
+<!--                        <parallel>methods</parallel>-->
+<!--                        <threadCount>4</threadCount>-->
+<!--                        <argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>-->
+<!--                    </configuration>-->
                 </plugin>
                 <plugin>
                     <artifactId>maven-jar-plugin</artifactId>
