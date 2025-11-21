@@ -15,8 +15,8 @@ public class DriverSingleton {
     public static WebDriver getDriver() {
         if (driver == null) {
             logger.info("Initializing WebDriver");
-            String browser = System.setProperty("browser","firefox");
-            switch (System.getProperty("browser")) {
+            String browser = System.getProperty("browser","firefox");
+            switch (browser) {
                 case "edge" -> {
                     logger.info("Using Edge Driver");
                     driver =  new EdgeDriver();
