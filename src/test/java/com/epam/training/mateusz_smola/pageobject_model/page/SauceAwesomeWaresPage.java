@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class SauceAwesomeWaresPage extends AbstractPage {
-
+//TODO your logger is never used, consider removing it but better use Lombok @Slf4j annotation to generate it for you
     private static final Logger logger = LoggerFactory.getLogger(SauceAwesomeWaresPage.class);
 
     public SauceAwesomeWaresPage(WebDriver driver) {
@@ -15,7 +15,8 @@ public class SauceAwesomeWaresPage extends AbstractPage {
     }
 
     public String extractTitleName() {
-        logger.info("Extracting title");
+
+//        Todo
         return driver.getTitle();
     }
 }

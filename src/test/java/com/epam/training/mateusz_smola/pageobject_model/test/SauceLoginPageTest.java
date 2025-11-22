@@ -42,10 +42,11 @@ public class SauceLoginPageTest {
         logger.info("Start logging test, no username");
         String expectedMessage = "Username is required";
         String actualMessage = loginPage.openPage().enterCredentials(username, password).
+//              TODO   Java code style suggestion: put dote at the beginning of the line
                 clearUsername().
                 clickLoginWrongCredentials().
                 getErrorMessage();
-
+//TODO it's a good practice to add assertion messages to make test reports more readable
         assertThat(actualMessage).contains(expectedMessage);
     }
 
@@ -56,6 +57,7 @@ public class SauceLoginPageTest {
         String expectedMessage = "Password is required";
         String actualMessage = loginPage.openPage().enterCredentials(username, password)
                 .clearPassword()
+//TODO discuss you wanna erase password or username in this test
                 .clickLoginWrongCredentials()
                 .getErrorMessage();
 
@@ -65,6 +67,7 @@ public class SauceLoginPageTest {
     @ParameterizedTest
     @CsvFileSource(files = "src/test/resources/SourceLoginCredentials.csv", delimiterString = ",")
     public void testLoginWithValidCredentials (String username, String password) {
+//TODO consider using placeholder {} in logger it's more efficient and readable
         logger.info("Start logging test" + "Username: " + username + " Password :" + password);
         String expectedTitle = "Swag Labs";
         String actualTitle = loginPage.openPage()

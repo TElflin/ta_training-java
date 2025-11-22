@@ -47,6 +47,7 @@
             <version>5.11.0</version>
             <scope>test</scope>
         </dependency>
+<!--        TODO If you're not using it, don't keep it.-->
         <!-- Engine dependency cause :  ".SurefireBooterForkException: There was an error in the forked process"  -->
 <!--        <dependency>-->
 <!--            <groupId>org.junit.jupiter</groupId>-->
@@ -66,7 +67,7 @@
             <artifactId>selenium-java</artifactId>
             <version>4.37.0</version>
         </dependency>
-
+<!--TODO too many loggers-->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -96,6 +97,7 @@
     <build>
         <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (maybe moved to parent pom) -->
             <plugins>
+<!--                TODO tell me about default lifecycles-->
                 <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
                 <plugin>
                     <artifactId>maven-clean-plugin</artifactId>
