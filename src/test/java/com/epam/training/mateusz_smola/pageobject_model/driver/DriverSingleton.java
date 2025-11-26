@@ -1,30 +1,34 @@
 package com.epam.training.mateusz_smola.pageobject_model.driver;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DriverSingleton {
-    private static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
-    private static final Logger logger = LoggerFactory.getLogger(DriverSingleton.class);
 
-    private DriverSingleton(){}
+    private static final ThreadLocal<WebDriver> driver = new ThreadLocal<>();
 
     public static WebDriver getDriver() {
         if (driver.get() == null) {
-            logger.info("Initializing WebDriver");
-            String browser = System.getProperty("browser", "firefox");
-            switch (System.getProperty("browser")) {
+            log.info("Initializing WebDriver");
+            String browser = System.getProperty("browser");
+            switch (browser) {
                 case "edge" -> {
-                    logger.info("Using Edge Driver");
-                    driver.set( new EdgeDriver());
+                    log.info("Using Edge Driver");
+                    driver.set(new EdgeDriver());
                 }
-                default -> {
-                    logger.info("Using Firefox Driver");
-                    driver.set( new FirefoxDriver());
+                case "firefox" -> {
+                    log.info("Using Firefox Driver");
+                    driver.set(new FirefoxDriver());
+                }
+                case null, default -> {
+                    log.info("No compatible browser specified : -Dbrowser=yourbrowser");
+                    throw new IllegalArgumentException("No compatible browser specified : -Dbrowser=yourbrowser");
                 }
             }
         }
@@ -33,8 +37,11 @@ public class DriverSingleton {
     }
 
     public static void closeDriver() {
-        driver.get().quit();
-        driver.remove();
-        logger.info("Closing WebDriver");
+        if (driver.get() != null) {
+            driver.get().quit();
+            driver.remove();
+        }
+        log.info("Closing WebDriver");
     }
+
 }

@@ -2,77 +2,84 @@ package com.epam.training.mateusz_smola.pageobject_model.test;
 
 import com.epam.training.mateusz_smola.pageobject_model.driver.DriverSingleton;
 import com.epam.training.mateusz_smola.pageobject_model.page.SauceLoginPage;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.openqa.selenium.WebDriver;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
-
-@Execution(ExecutionMode.CONCURRENT)
-@TestInstance(TestInstance.Lifecycle.PER_METHOD)
+@Slf4j
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class SauceLoginPageTest {
 
-    private static final Logger logger = LoggerFactory.getLogger(SauceLoginPageTest.class);
     private WebDriver driver;
     public static SauceLoginPage loginPage;
 
     @BeforeEach
     public void setup() {
-        logger.info("Setting up for tests");
+        log.info("Setting up for tests");
         driver = DriverSingleton.getDriver();
         loginPage = new SauceLoginPage(driver);
     }
 
     @AfterEach
     public void tearDown() {
-        logger.info("Clearing after tests");
+        log.info("Clearing after tests");
         DriverSingleton.closeDriver();
     }
 
 
-
     @ParameterizedTest
-    @CsvFileSource(files = "src/test/resources/SourceLoginCredentialsForFail.csv", delimiterString = ",")
-    void testLoginWithErasedUsername (String username, String password) {
-        logger.info("Start logging test, no username");
-        String expectedMessage = "Username is required";
-        String actualMessage = loginPage.openPage().enterCredentials(username, password).
-                clearUsername().
-                clickLoginWrongCredentials().
-                getErrorMessage();
+    @CsvFileSource(files = "src/test/resources/SourceAnyLoginCredentials.csv", delimiterString = ",")
+    void testLoginWithErasedUsername(String username, String password) {
 
-        assertThat(actualMessage).contains(expectedMessage);
+        log.info("Start logging test, no username");
+        logUsedCredentials(username, password);
+        String expectedMessage = "Username is required";
+        String actualMessage = loginPage.openPage()
+                .enterCredentials(username, password)
+                .clearUsername()
+                .clickLoginWrongCredentials()
+                .getErrorMessage();
+
+        assertThat(actualMessage).as("Check if error username message, as expected").contains(expectedMessage);
     }
 
     @ParameterizedTest
-    @CsvFileSource(files = "src/test/resources/SourceLoginCredentialsForFail.csv", delimiterString = ",")
-    void testLoginWithErasedPassword (String username, String password) {
-        logger.info("Start logging test, no password");
+    @CsvFileSource(files = "src/test/resources/SourceAnyPasswordCredentials.csv", delimiterString = ",")
+    void testLoginWithErasedPassword(String username, String password) {
+
+        log.info("Start logging test, no password");
+        logUsedCredentials(username, password);
         String expectedMessage = "Password is required";
-        String actualMessage = loginPage.openPage().enterCredentials(username, password)
+        String actualMessage = loginPage.openPage()
+                .enterCredentials(username, password)
                 .clearPassword()
                 .clickLoginWrongCredentials()
                 .getErrorMessage();
 
-        assertThat(actualMessage).contains(expectedMessage);
+        assertThat(actualMessage).as("Check if error password message, as expected").contains(expectedMessage);
     }
 
     @ParameterizedTest
-    @CsvFileSource(files = "src/test/resources/SourceLoginCredentials.csv", delimiterString = ",")
-    public void testLoginWithValidCredentials (String username, String password) {
-        logger.info("Start logging test" + "Username: " + username + " Password :" + password);
+    @CsvFileSource(files = "src/test/resources/SourceCorrectLoginCredentials.csv", delimiterString = ",")
+    public void testLoginWithValidCredentials(String username, String password) {
+
+        log.info("Start logging test, correct credentials");
+        logUsedCredentials(username, password);
         String expectedTitle = "Swag Labs";
         String actualTitle = loginPage.openPage()
                 .enterCredentials(username, password)
                 .clickLoginRightCredentials()
                 .extractTitleName();
 
-        assertThat(actualTitle).isEqualTo(expectedTitle);
+        assertThat(actualTitle).as("New site title check, after login").isEqualTo(expectedTitle);
+    }
+
+    private static void logUsedCredentials(String username, String password) {
+        log.info("Start logging test Username: {} Password :{}", username, password);
     }
 
 }
